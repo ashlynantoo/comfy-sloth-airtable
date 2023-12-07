@@ -63,7 +63,7 @@ const StripeCheckoutForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:8080/checkout",
+        return_url: "https://ashlynz-comfy-sloth.netlify.app/checkout",
       },
     });
     if (error.type === "card_error" || error.type === "validation_error") {
