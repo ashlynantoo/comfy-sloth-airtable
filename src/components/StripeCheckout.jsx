@@ -16,7 +16,7 @@ const StripeCheckout = () => {
   const createPaymentIntent = async () => {
     try {
       const { data } = await axios.post(
-        "/checkout/payment",
+        "/.netlify/functions/payment",
         JSON.stringify({ total_amount, shipping_fee })
       );
       setClientSecret(data.clientSecret);
