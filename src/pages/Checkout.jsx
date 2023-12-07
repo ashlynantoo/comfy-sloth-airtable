@@ -1,36 +1,35 @@
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { CartTotals, CheckoutForm, SectionTitle } from "../components";
-import { redirect } from "react-router-dom";
-import { toast } from "react-toastify";
-
-export const loader = (store) => {
-  return () => {
-    const user = store.getState().userState.user;
-    if (!user) {
-      toast.warn("Please log in to checkout");
-      return redirect("/login");
-    }
-    return null;
-  };
-};
+import { CartTotals, Path, StripeCheckout } from "../components";
+import Wrapper from "../assets/wrappers/Checkout";
 
 const Checkout = () => {
-  const { numItemsInCart } = useSelector((store) => {
+  const { total_items } = useSelector((store) => {
     return store.cartState;
   });
 
-  if (numItemsInCart === 0) {
-    return <SectionTitle title="your cart is empty" />;
+  if (total_items === 0) {
+    return (
+      <Wrapper>
+        <Path title="checkout" />
+        <div className="section section-center page empty-checkout">
+          <h4>Your cart is empty</h4>
+          <Link to="/products" className="btn">
+            shop now
+          </Link>
+        </div>
+      </Wrapper>
+    );
   }
 
   return (
-    <>
-      <SectionTitle title="place your order" />
-      <div className="mt-8 grid gap-8 md:grid-cols-2 items-center">
-        <CheckoutForm />
+    <Wrapper>
+      <Path title="checkout" />
+      <div className="section section-center page checkout">
         <CartTotals />
+        <StripeCheckout />
       </div>
-    </>
+    </Wrapper>
   );
 };
 

@@ -1,0 +1,17 @@
+[dev]
+command = "npm run vite:start"
+publish="dist"
+targetPort=5173
+port=8080
+
+[build]
+command = "npm run vite:build"
+publish="dist"
+
+[functions]
+node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/checkout/payment"
+  to = "/.netlify/functions/payment"
+  status = 200

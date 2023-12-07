@@ -1,32 +1,53 @@
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useAuth0 } from "@auth0/auth0-react";
 import { formatPrice } from "../utils";
+import Wrapper from "../assets/wrappers/CartTotals";
 
 const CartTotals = () => {
-  const { cartTotal, shipping, tax, orderTotal } = useSelector((store) => {
+  const { loginWithRedirect } = useAuth0();
+  const { total_amount, shipping_fee } = useSelector((store) => {
     return store.cartState;
+  });
+  const { user } = useSelector((store) => {
+    return store.userState;
   });
 
   return (
-    <div className="card bg-base-200">
-      <div className="card-body">
-        <p className="flex justify-between text-xs border-b border-base-300 pb-2">
+    <Wrapper>
+      <article>
+        <h4>Order Summary</h4>
+        <h5>
           <span>Subtotal</span>
-          <span className="font-medium">{formatPrice(cartTotal)}</span>
-        </p>
-        <p className="flex justify-between text-xs border-b border-base-300 pb-2">
+          <span>{formatPrice(total_amount)}</span>
+        </h5>
+        <h5>
           <span>Shipping</span>
-          <span className="font-medium">{formatPrice(shipping)}</span>
-        </p>
-        <p className="flex justify-between text-xs border-b border-base-300 pb-2">
-          <span>Tax</span>
-          <span className="font-medium">{formatPrice(tax)}</span>
-        </p>
-        <p className="flex justify-between text-sm mt-4 pb-2">
+          <span>{formatPrice(shipping_fee)}</span>
+        </h5>
+        <h5 className="total">
           <span>Order Total</span>
-          <span className="font-medium">{formatPrice(orderTotal)}</span>
-        </p>
+          <span>{formatPrice(total_amount + shipping_fee)}</span>
+        </h5>
+      </article>
+      <div className="btn-container">
+        {user ? (
+          <Link to="/checkout" className="btn">
+            proceed to checkout
+          </Link>
+        ) : (
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              loginWithRedirect();
+            }}
+          >
+            please login
+          </button>
+        )}
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

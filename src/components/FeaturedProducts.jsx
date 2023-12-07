@@ -1,11 +1,25 @@
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Wrapper from "../assets/wrappers/FeaturedProducts";
 import { SectionTitle, ProductsGrid } from "../components";
 
 const FeaturedProducts = () => {
+  const { featuredProducts } = useSelector((store) => {
+    return store.productsState;
+  });
+
   return (
-    <div className="pt-24">
-      <SectionTitle title="featured products" />
-      <ProductsGrid />
-    </div>
+    <Wrapper>
+      <div className="section section-center">
+        <SectionTitle title="featured products" />
+        <ProductsGrid products={featuredProducts} />
+        <div className="btn-container">
+          <Link to="/products" className="btn">
+            all products
+          </Link>
+        </div>
+      </div>
+    </Wrapper>
   );
 };
 

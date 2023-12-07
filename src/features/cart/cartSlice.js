@@ -2,16 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const defaultState = {
-  cartItems: [],
-  numItemsInCart: 0,
-  cartTotal: 0,
-  shipping: 500,
-  tax: 0,
-  orderTotal: 0,
+  cart: [],
+  total_items: 0,
+  total_amount: 0,
+  shipping_fee: 500,
 };
 
 const getCartFromLocalStorage = () => {
-  const cart = localStorage.getItem("comfy-store-cart");
+  const cart = localStorage.getItem("comfy-sloth-cart");
   return JSON.parse(cart);
 };
 
@@ -20,57 +18,71 @@ const cartSlice = createSlice({
   initialState: getCartFromLocalStorage() || defaultState,
   reducers: {
     addItem: (state, action) => {
-      const { product } = action.payload;
-      const selectedItem = state.cartItems.find((item) => {
-        return item.cartID === product.cartID;
+      const cartItem = action.payload;
+      const selectedItem = state.cart.find((item) => {
+        return item.id === cartItem.id;
       });
       if (selectedItem) {
-        selectedItem.amount += product.amount;
+        selectedItem.amount += cartItem.amount;
+        if (selectedItem.max !== cartItem.max) {
+          selectedItem.max = cartItem.max;
+        }
+        if (selectedItem.amount > selectedItem.max) {
+          selectedItem.amount = selectedItem.max;
+          toast.error(`Sorry, we have only ${selectedItem.max} items in stock`);
+        }
       } else {
-        state.cartItems.push(product);
+        state.cart.push(cartItem);
       }
-      state.numItemsInCart += product.amount;
-      state.cartTotal += product.amount * product.price;
       cartSlice.caseReducers.calculateTotals(state);
-      toast.success("Item added to the cart");
     },
 
     removeItem: (state, action) => {
-      const { cartID } = action.payload;
-      const selectedItem = state.cartItems.find((item) => {
-        return item.cartID === cartID;
+      const id = action.payload;
+      state.cart = state.cart.filter((item) => {
+        return item.id !== id;
       });
-      state.cartItems = state.cartItems.filter((item) => {
-        return item.cartID !== cartID;
-      });
-      state.numItemsInCart -= selectedItem.amount;
-      state.cartTotal -= selectedItem.amount * selectedItem.price;
       cartSlice.caseReducers.calculateTotals(state);
-      toast.error("Item removed from the cart");
     },
 
     editItem: (state, action) => {
-      const { cartID, amount } = action.payload;
-      const selectedItem = state.cartItems.find((item) => {
-        return item.cartID === cartID;
+      const { id, fnName } = action.payload;
+      const selectedItem = state.cart.find((item) => {
+        return item.id === id;
       });
-      const difference = amount - selectedItem.amount;
-      selectedItem.amount = amount;
-      state.numItemsInCart += difference;
-      state.cartTotal += difference * selectedItem.price;
+      if (fnName === "inc") {
+        selectedItem.amount++;
+        if (selectedItem.amount > selectedItem.max) {
+          selectedItem.amount = selectedItem.max;
+          toast.error(`Sorry, we have only ${selectedItem.max} items in stock`);
+        }
+      } else if (fnName === "dec") {
+        selectedItem.amount--;
+        if (selectedItem.amount < 1) {
+          selectedItem.amount = 1;
+        }
+      }
       cartSlice.caseReducers.calculateTotals(state);
-      toast.success("Updated the cart");
     },
 
     clearCart: (state) => {
-      localStorage.setItem("comfy-store-cart", JSON.stringify(defaultState));
+      localStorage.setItem("comfy-sloth-cart", JSON.stringify(defaultState));
       return defaultState;
     },
 
     calculateTotals: (state) => {
-      state.tax = 0.1 * state.cartTotal;
-      state.orderTotal = state.cartTotal + state.tax + state.shipping;
-      localStorage.setItem("comfy-store-cart", JSON.stringify(state));
+      const { totalItems, totalAmount } = state.cart.reduce(
+        (total, item) => {
+          const { amount, price } = item;
+          total.totalItems += amount;
+          total.totalAmount += price * amount;
+          return total;
+        },
+        { totalItems: 0, totalAmount: 0 }
+      );
+      state.total_items = totalItems;
+      state.total_amount = totalAmount;
+      localStorage.setItem("comfy-sloth-cart", JSON.stringify(state));
     },
   },
 });

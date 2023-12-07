@@ -1,15 +1,14 @@
 import { useRouteError } from "react-router-dom";
+import Wrapper from "../assets/wrappers/Error";
 
 const ErrorElement = () => {
   const error = useRouteError();
   console.log(error);
 
   return (
-    <main className="grid min-h-[50vh] place-items-center px-8">
-      <h4 className="text-center font-bold text-4xl">
-        An error occurred. Please try again later.
-      </h4>
-    </main>
+    <Wrapper className="error-element-page">
+      <h4>An error occurred. Please try again later.</h4>
+    </Wrapper>
   );
 };
 

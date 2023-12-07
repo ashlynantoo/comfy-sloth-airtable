@@ -1,59 +1,88 @@
-import { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ProductsGrid, ProductsList } from "../components";
 import { BsFillGridFill, BsList } from "react-icons/bs";
+import Wrapper from "../assets/wrappers/ProductsContainer";
+import {
+  openFiltersModal,
+  setGridView,
+  setListView,
+  sortProducts,
+} from "../features/products/productsSlice";
 
 const ProductsContainer = () => {
-  const { meta } = useLoaderData();
-  const totalProducts = meta.pagination.total;
-
-  const [layout, setLayout] = useState("grid");
-
-  const setActiveStyles = (pattern) => {
-    return `text-xl btn btn-circle btn-sm ${
-      pattern === layout ? "btn-accent text-accent-content" : "btn-ghost"
-    }`;
-  };
+  const dispatch = useDispatch();
+  const { gridView, filteredProducts, sort } = useSelector((store) => {
+    return store.productsState;
+  });
 
   return (
-    <>
-      <div className="flex justify-between items-center mt-8 border-b border-base-300 pb-5">
-        <h4 className="font-medium text-md">
-          {totalProducts} product{totalProducts > 1 && "s"}
-        </h4>
-        <div className="flex gap-x-2">
+    <Wrapper>
+      <div className="products-info">
+        <div className="info">
+          <div className="btn-container">
+            <button
+              type="button"
+              onClick={() => {
+                dispatch(setGridView());
+              }}
+              className={gridView ? "active" : null}
+            >
+              <BsFillGridFill />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                dispatch(setListView());
+              }}
+              className={!gridView ? "active" : null}
+            >
+              <BsList />
+            </button>
+          </div>
+          <p>
+            {filteredProducts.length} product
+            {filteredProducts.length > 1 && "s"} found
+          </p>
+        </div>
+        <div className="filter">
+          <form>
+            <label htmlFor="sort">Sort by</label>
+            <select
+              name="sort"
+              id="sort"
+              value={sort}
+              onChange={(event) => {
+                dispatch(sortProducts(event.target.value));
+              }}
+              className="sort-input"
+            >
+              <option value="price-lowest">Price : Low to High</option>
+              <option value="price-highest">Price : High to Low</option>
+              <option value="name-a">Name (A - Z)</option>
+              <option value="name-z">Name (Z - A)</option>
+            </select>
+          </form>
           <button
             type="button"
             onClick={() => {
-              setLayout("grid");
+              dispatch(openFiltersModal());
             }}
-            className={setActiveStyles("grid")}
+            className="filter-btn"
           >
-            <BsFillGridFill />
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setLayout("list");
-            }}
-            className={setActiveStyles("list")}
-          >
-            <BsList />
+            filter
           </button>
         </div>
       </div>
       <div>
-        {totalProducts === 0 ? (
-          <h5 className="text-2xl mt-16">
-            Sorry, no products matched your search criteria...
-          </h5>
-        ) : layout === "grid" ? (
-          <ProductsGrid />
+        {filteredProducts.length === 0 ? (
+          <h5>Sorry, no products matched your search criteria.</h5>
+        ) : gridView ? (
+          <ProductsGrid products={filteredProducts} />
         ) : (
-          <ProductsList />
+          <ProductsList products={filteredProducts} />
         )}
       </div>
-    </>
+    </Wrapper>
   );
 };
 

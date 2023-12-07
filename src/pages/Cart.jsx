@@ -1,40 +1,35 @@
-import { useSelector } from "react-redux";
-import { CartItemsList, CartTotals, SectionTitle } from "../components";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Path, CartItemsList, CartTotals } from "../components";
+import Wrapper from "../assets/wrappers/Cart";
 
 const Cart = () => {
-  const { user } = useSelector((store) => {
-    return store.userState;
-  });
-  const { numItemsInCart } = useSelector((store) => {
+  const { total_items } = useSelector((store) => {
     return store.cartState;
   });
 
-  if (numItemsInCart === 0) {
-    return <SectionTitle title="your cart is empty" />;
+  if (total_items === 0) {
+    return (
+      <Wrapper>
+        <Path title="cart" />
+        <div className="section section-center page empty-cart">
+          <h4>Your cart is empty</h4>
+          <Link to="/products" className="btn">
+            shop now
+          </Link>
+        </div>
+      </Wrapper>
+    );
   }
 
   return (
-    <>
-      <SectionTitle title="shopping cart" />
-      <div className="mt-8 grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-8">
-          <CartItemsList />
-        </div>
-        <div className="w-full max-w-md mx-auto lg:col-span-4 lg:pl-4">
-          <CartTotals />
-          {user ? (
-            <Link to="/checkout" className="btn btn-accent btn-block mt-8">
-              proceed to checkout
-            </Link>
-          ) : (
-            <Link to="/login" className="btn btn-accent btn-block mt-8">
-              please login
-            </Link>
-          )}
-        </div>
+    <Wrapper>
+      <Path title="cart" />
+      <div className="section section-center page cart-container">
+        <CartItemsList />
+        <CartTotals />
       </div>
-    </>
+    </Wrapper>
   );
 };
 

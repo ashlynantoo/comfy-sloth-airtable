@@ -1,29 +1,32 @@
-import { FeaturedProducts, Hero } from "../components";
+import { Contact, FeaturedProducts, Hero, Services } from "../components";
+import { filterFeaturedProducts } from "../features/products/productsSlice";
 import { customFetch } from "../utils";
 
-const url = "/products?featured=true";
+const url = "/react-store-products";
 
-const featuredProductsQuery = {
-  queryKey: ["featuredProducts"],
+const productsQuery = {
+  queryKey: ["products"],
   queryFn: () => {
     return customFetch(url);
   },
 };
 
-export const loader = (queryClient) => {
+export const loader = (queryClient, store) => {
   return async () => {
-    const { data } = await queryClient.ensureQueryData(featuredProductsQuery);
-    const products = data.data;
+    const { data: products } = await queryClient.ensureQueryData(productsQuery);
+    store.dispatch(filterFeaturedProducts(products));
     return { products };
   };
 };
 
 const Landing = () => {
   return (
-    <section>
+    <main>
       <Hero />
       <FeaturedProducts />
-    </section>
+      <Services />
+      <Contact />
+    </main>
   );
 };
 

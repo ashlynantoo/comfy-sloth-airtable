@@ -1,11 +1,13 @@
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { navLinks } from "../utils";
+import { closeSidebar } from "../features/user/userSlice";
 
 const NavLinks = () => {
   const { user } = useSelector((store) => {
     return store.userState;
   });
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -15,8 +17,13 @@ const NavLinks = () => {
           return null;
         }
         return (
-          <li key={id} className="hover:bg-accent hover:rounded-lg">
-            <NavLink to={url} className="capitalize">
+          <li key={id}>
+            <NavLink
+              to={url}
+              onClick={() => {
+                dispatch(closeSidebar());
+              }}
+            >
               {text}
             </NavLink>
           </li>

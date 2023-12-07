@@ -1,32 +1,30 @@
+import Wrapper from "../assets/wrappers/About";
+import { Path, SectionTitle } from "../components";
+import aboutImg from "../assets/images/hero-1.jpeg";
+
 const About = () => {
   return (
-    <section>
-      <div className="flex flex-wrap gap-4 md:gap-x-6 items-center justify-center">
-        <h1 className="text-5xl md:text-6xl font-bold leading-none tracking-tight">
-          We love
-        </h1>
-        <div className="stats bg-accent shadow">
-          <div className="stat">
-            <div className="stat-title text-accent-content text-4xl font-bold tracking-widest">
-              comfy
-            </div>
-          </div>
-        </div>
-      </div>
-      <p className="mt-6 text-lg text-justify leading-8">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam
-        corrupti atque, eius asperiores incidunt nemo unde nam obcaecati animi
-        eaque, corporis esse eligendi, molestias magni laudantium praesentium
-        quae consequuntur. Placeat recusandae dolores autem rem eum numquam
-        mollitia vitae harum, itaque id quaerat officiis, facilis eveniet
-        temporibus tenetur nam earum laboriosam dignissimos a beatae labore cum.
-        Aliquam eos ipsa, explicabo maiores hic error alias saepe eius
-        aspernatur ullam, dolor, dolores molestias veniam quia sint. Similique
-        tenetur sequi obcaecati! Dicta ratione laborum maiores sint quae nemo a
-        eveniet qui atque veniam pariatur libero fuga totam nisi deleniti, sed
-        debitis neque ipsum sunt.
-      </p>
-    </section>
+    <main>
+      <Path title="about" />
+      <Wrapper className="section section-center page">
+        <img src={aboutImg} alt="image of a desk" />
+        <article>
+          <SectionTitle title="our story" />
+          <p>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat
+            accusantium sapiente tempora sed dolore esse deserunt eaque
+            excepturi, delectus error accusamus vel eligendi, omnis beatae.
+            Quisquam, dicta. Eos quod quisquam esse recusandae vitae neque
+            dolore, obcaecati incidunt sequi blanditiis est exercitationem
+            molestiae delectus saepe odio eligendi modi porro eaque in libero
+            minus unde sapiente consectetur architecto. Ullam rerum, nemo iste
+            ex, eaque perspiciatis nisi, eum totam velit saepe sed quos
+            similique amet. Ex, voluptate accusamus nesciunt totam vitae esse
+            iste.
+          </p>
+        </article>
+      </Wrapper>
+    </main>
   );
 };
 
