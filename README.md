@@ -1,10 +1,13 @@
-## Comfy Store
+## Comfy Sloth
 
-E-commerce website developed using react, redux tool kit, react query, tailwind CSS and daisyUI.
+An E-commerce website developed using react, redux tool kit, react query, react router and styled components.
 
-[Demo](https://ashlynz-comfy-store.netlify.app)
+Demo - [Comfy Sloth](https://ashlynz-comfy-sloth.netlify.app)
 
 #### Steps
 
-npm install
-npm run dev
+```sh
+npm install && npm run dev
+```
+
+- visit url http://localhost:8080 (netlify serverless function)
