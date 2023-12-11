@@ -16,7 +16,7 @@ const singleProductQuery = (productId) => {
   return {
     queryKey: ["singleProduct", productId],
     queryFn: () => {
-      const url = `/react-store-single-product?id=${productId}`;
+      const url = `/single-product?id=${productId}`;
       return customFetch(url);
     },
   };

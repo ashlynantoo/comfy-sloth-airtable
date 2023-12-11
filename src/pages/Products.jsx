@@ -8,7 +8,7 @@ import {
 } from "../features/products/productsSlice";
 import { customFetch } from "../utils";
 
-const url = "/react-store-products";
+const url = "/products";
 
 const productsQuery = {
   queryKey: ["products"],

@@ -1,6 +1,6 @@
-## Comfy Sloth
+## Comfy Sloth using Airtable
 
-An E-commerce website developed using react, redux tool kit, react query, react router and styled components.
+An E-commerce website developed using react, react router, redux tool kit, react query, and styled components. The products are stored in airtable and netlify serverless functions are used. Authentication is done using Auth0. Online payment is implemented using Stripe.
 
 Demo - [Comfy Sloth](https://ashlynz-comfy-sloth.netlify.app)
 

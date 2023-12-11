@@ -7,7 +7,10 @@ const ErrorElement = () => {
 
   return (
     <Wrapper className="error-element-page">
-      <h4>An error occurred. Please try again later.</h4>
+      <h4>
+        {error.response.data.error ||
+          "An error occurred. Please try again later."}
+      </h4>
     </Wrapper>
   );
 };
